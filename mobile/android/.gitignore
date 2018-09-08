@@ -75,3 +75,4 @@ fastlane/readme.md
 /android/captures
 .externalNativeBuild
 app/build/intermediates/
+app/src/main/res/values/secrets.xml

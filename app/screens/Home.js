@@ -1,56 +1,60 @@
 import React, { Component } from "react";
 import { StyleSheet } from "react-native";
-import MapView, { Circle } from "react-native-maps";
+import MapView, { Circle, Marker } from "react-native-maps";
 
 import bottle from "../bottle";
 
 class HomeScreen extends Component {
+
   constructor() {
     super();
     this.state = {
-      fires: [],
+      circles: [],
+      markers: [],
     };
   }
 
   async componentDidMount() {
-    this.setState({ fires: await bottle.fireManager.fetchAllFires() });
+    const fireData = await bottle.fireManager.fetchFireData();
+    const { circles, markers } = fireData;
+    this.setState({ circles, markers });
   }
 
   render() {
-    console.log(this.state.fires);
-
-    const fires = this.state.fires.map((fire, index) => (
+    const circles = this.state.circles.map((circle, index) => (
         <Circle
           key={index}
-          center={{
-            latitude: parseFloat(fire.latitude),
-            longitude: parseFloat(fire.longitude),
-          }}
-          radius={fire.radius * 10}
+          center={circle}
+          radius={circle.radius * 2}
           fillColor="rgba(255, 0, 0, 0.5)"
         />
     ));
 
-
-    // const fires = this.state.fires[0] ? (
-    //   <Circle
-    //     center={{
-    //       latitude: 49.0,
-    //       longitude: -120.0,
-    //     }}
-    //     radius={1000000}
-    //     fillColor="rgba(255, 0, 0, 0.5)"
-    //   />
-    // ) : null;
+    const markers = this.state.markers.map((marker, index) => (
+      <Marker
+        key={index}
+        title={marker.title}
+        description={marker.content}
+        coordinate={marker}
+      />
+    ));
 
     return (
       <MapView
         style={styles.map}
         provider="google"
-        mapType="hybrid"
         showsUserLocation={true}
+        initialRegion={{
+          latitude: 45.719844,
+          longitude: -120.547995,
+          latitudeDelta: 10,
+          longitudeDelta: 10,
+        }}
+        minZoomLevel={6}
+        maxZoomlevel={16}
       >
-        {fires}
+        {circles}
+        {markers}
       </MapView>
     )
   }

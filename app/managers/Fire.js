@@ -3,8 +3,8 @@ class FireManager {
     this._fireAPISerivce = fireAPIService;
   }
 
-  async fetchAllFires() {
-    return await this._fireAPISerivce.fetchAllFires();
+  async fetchFireData() {
+    return await this._fireAPISerivce.fetchFireData();
   }
 }
 

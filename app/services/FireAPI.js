@@ -1,6 +1,6 @@
 class FireAPIService {
-  async fetchAllFires() {
-    const response = await fetch("http://10.0.2.2:5000/fire");
+  async fetchFireData() {
+    const response = await fetch("https://protected-chamber-85126.herokuapp.com/fire");
     return response.json();
   }
 }

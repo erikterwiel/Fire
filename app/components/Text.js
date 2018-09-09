@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text as ReactNativeText, StyleSheet } from 'react-native';
 
-const Text = (props: Props) => {
+const Text = (props) => {
   const {
     children,
     style,
@@ -61,6 +61,7 @@ const Text = (props: Props) => {
 const styles = StyleSheet.create({
   base: {
     color: "#212121",
+    fontFamily: "VarelaRound-Regular",
   },
   white: {
     color: "white",

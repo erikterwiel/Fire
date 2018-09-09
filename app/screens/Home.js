@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import MapView, { Circle, Marker } from "react-native-maps";
 
 import bottle from "../bottle";
+import Text from "../components/Text";
 
 class HomeScreen extends Component {
 
@@ -49,8 +50,9 @@ class HomeScreen extends Component {
   };
 
   render() {
-    console.log(this.state);
-    const circles = this.state.circles.map((circle, index) => (
+    const { circles, markers, rating, color } = this.state;
+
+    const mapCircles = circles.map((circle, index) => (
         <Circle
           key={index}
           center={circle}
@@ -59,7 +61,7 @@ class HomeScreen extends Component {
         />
     ));
 
-    const markers = this.state.markers.map((marker, index) => (
+    const mapMarkers = markers.map((marker, index) => (
       <Marker
         key={index}
         title={marker.title}
@@ -68,26 +70,45 @@ class HomeScreen extends Component {
       />
     ));
 
+    const qualityCircle = rating && (
+      <View style={[styles.qualityCircle, { backgroundColor: color }]}>
+        <Text h6 white center>{`${rating} / 100`}</Text>
+      </View>
+    );
+
     return (
-      <MapView
-        style={styles.map}
-        provider="google"
-        showsUserLocation={true}
-        initialRegion={this._initialRegion}
-        minZoomLevel={6}
-        maxZoomlevel={16}
-        onRegionChangeComplete={this.fetchConditionsForLocation}
-      >
-        {circles}
-        {markers}
-      </MapView>
+      <View style={styles.container}>
+        <MapView
+          style={styles.container}
+          provider="google"
+          showsUserLocation={true}
+          initialRegion={this._initialRegion}
+          minZoomLevel={6}
+          maxZoomlevel={16}
+          onRegionChangeComplete={this.fetchConditionsForLocation}
+        >
+          {mapCircles}
+          {mapMarkers}
+        </MapView>
+        {qualityCircle}
+      </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  map: {
+  container: {
     flex: 1,
+  },
+  qualityCircle: {
+    position: "absolute",
+    top: 16,
+    right: 16,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, TouchableNativeFeedback } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import LinearGradient from "react-native-linear-gradient";
 import TextBox from "../components/TextBox";
@@ -48,11 +48,11 @@ class LoginScreen extends Component {
           password
         />
         <View style={styles.filler} />
-        <View style={styles.buttonContainer}>
+        <TouchableNativeFeedback style={styles.buttonContainer}>
           <View style={styles.button}>
             <Icon name="chevron-right" size={24} color="#fff" />
           </View>
-        </View>
+        </TouchableNativeFeedback>
       </LinearGradient>
     );
   }

@@ -1,9 +1,13 @@
 import React, { Component } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, TouchableOpacity, TouchableNativeFeedback } from "react-native";
 import MapView, { Circle, Marker } from "react-native-maps";
+import Drawer from "react-native-drawer";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import bottle from "../bottle";
 import Text from "../components/Text";
+import TouchableText from "../components/TouchableText";
+import TextBox from "../components/TextBox";
 
 class HomeScreen extends Component {
 
@@ -49,8 +53,34 @@ class HomeScreen extends Component {
     });
   };
 
+  navigateToLogin = () => {
+    this.props.navigation.navigate("Login");
+  };
+
+  navigateToSignup = () => {
+    this.props.navigation.navigate("Signup");
+  };
+
   render() {
     const { circles, markers, rating, color } = this.state;
+
+    const drawer = (
+      <View style={{ flex: 1, backgroundColor: "white" }}>
+        <View style={styles.header} />
+        <TouchableNativeFeedback onPress={this.navigateToLogin}>
+          <View style={styles.row}>
+            <Icon name="login" size={36} style={{ marginEnd: 8 }} />
+            <Text subtitle>Login</Text>
+          </View>
+        </TouchableNativeFeedback>
+        <TouchableNativeFeedback onPress={this.navigateToSignup}>
+          <View style={styles.row}>
+            <Icon name="login" size={36} style={{ marginEnd: 8 }} />
+            <Text subtitle>Signup</Text>
+          </View>
+        </TouchableNativeFeedback>
+      </View>
+    );
 
     const mapCircles = circles.map((circle, index) => (
         <Circle
@@ -70,6 +100,12 @@ class HomeScreen extends Component {
       />
     ));
 
+    const menuButton = (
+      <TouchableOpacity style={styles.menuButton} onPress={() => this._drawer.open()}>
+        <Icon name="menu" size={32} color="#000" />
+      </TouchableOpacity>
+    );
+
     const qualityCircle = rating && (
       <View style={[styles.qualityCircle, { backgroundColor: color }]}>
         <Text h6 white center>{`${rating} / 100`}</Text>
@@ -77,21 +113,36 @@ class HomeScreen extends Component {
     );
 
     return (
-      <View style={styles.container}>
-        <MapView
-          style={styles.container}
-          provider="google"
-          showsUserLocation={true}
-          initialRegion={this._initialRegion}
-          minZoomLevel={6}
-          maxZoomlevel={16}
-          onRegionChangeComplete={this.fetchConditionsForLocation}
-        >
-          {mapCircles}
-          {mapMarkers}
-        </MapView>
-        {qualityCircle}
-      </View>
+      <Drawer
+        ref={ref => this._drawer = ref}
+        content={drawer}
+        type="overlay"
+        openDrawerOffset={0.2}
+        tapToClose={true}
+        style={{
+          mainOverlay: {
+            backgroundColor: "#000",
+            opacity: 0.5,
+          },
+        }}
+      >
+        <View style={styles.container}>
+          <MapView
+            style={styles.container}
+            provider="google"
+            showsUserLocation={true}
+            initialRegion={this._initialRegion}
+            minZoomLevel={6}
+            maxZoomlevel={16}
+            onRegionChangeComplete={this.fetchConditionsForLocation}
+          >
+            {mapCircles}
+            {mapMarkers}
+          </MapView>
+          {menuButton}
+          {qualityCircle}
+        </View>
+      </Drawer>
     )
   }
 }
@@ -99,6 +150,23 @@ class HomeScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  header: {
+    height: 160,
+    width: "100%",
+    backgroundColor: "#E90000",
+  },
+  row: {
+    height: 64,
+    paddingHorizontal: 16,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  menuButton: {
+    position: "absolute",
+    top: 16,
+    left: 16,
+    fontSize: 32,
   },
   qualityCircle: {
     position: "absolute",

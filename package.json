@@ -25,7 +25,8 @@
     "react-native-linear-gradient": "^2.4.2",
     "react-native-maps": "^0.21.0",
     "react-native-vector-icons": "^5.0.0",
-    "react-navigation": "^2.13.0"
+    "react-navigation": "^2.13.0",
+    "rxjs": "^6.3.2"
   },
   "rnpm": {
     "assets": [

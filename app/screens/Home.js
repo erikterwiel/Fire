@@ -166,7 +166,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 16,
     left: 16,
-    fontSize: 32,
   },
   qualityCircle: {
     position: "absolute",

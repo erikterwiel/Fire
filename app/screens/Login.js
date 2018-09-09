@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { View, StyleSheet, TouchableNativeFeedback } from "react-native";
+import { NavigationActions, StackActions } from "react-navigation";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import LinearGradient from "react-native-linear-gradient";
 import TextBox from "../components/TextBox";
 import Text from "../components/Text";
 import TouchableText from "../components/TouchableText";
+import bottle from "../bottle";
 
 class LoginScreen extends Component {
 
@@ -22,6 +24,20 @@ class LoginScreen extends Component {
 
   updatePassword = (password) => {
     this.setState({ password })
+  };
+
+  login = async () => {
+    const result = await bottle.authManager.login(this.state);
+    if (!result) {
+      return;
+    }
+    const resetAction = StackActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: "Home" }),
+      ],
+    });
+    this.props.navigation.dispatch(resetAction);
   };
 
   render() {
@@ -48,11 +64,13 @@ class LoginScreen extends Component {
           password
         />
         <View style={styles.filler} />
-        <TouchableNativeFeedback style={styles.buttonContainer}>
-          <View style={styles.button}>
-            <Icon name="chevron-right" size={24} color="#fff" />
-          </View>
-        </TouchableNativeFeedback>
+        <View style={styles.buttonContainer}>
+          <TouchableNativeFeedback onPress={this.login}>
+            <View style={styles.button}>
+              <Icon name="chevron-right" size={24} color="#fff" />
+            </View>
+          </TouchableNativeFeedback>
+        </View>
       </LinearGradient>
     );
   }
@@ -77,6 +95,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   buttonContainer: {
+    width: "100%",
     alignItems: "flex-end",
   },
   button: {

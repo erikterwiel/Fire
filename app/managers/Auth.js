@@ -19,6 +19,13 @@ class AuthManager {
     this.user$.next(response);
     return true;
   }
+
+  async addProperty({ latitude, longitude, newText }) {
+    const user = JSON.parse(JSON.stringify(this.user$.getValue()));
+    user.properties.push({ latitude, longitude, title: newText });
+    await this._authService.updateUser(user);
+    this.user$.next(user);
+  }
 }
 
 export default AuthManager;

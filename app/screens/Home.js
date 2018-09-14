@@ -21,6 +21,7 @@ class HomeScreen extends Component {
       description: undefined,
       pollutant: undefined,
       recommendation: undefined,
+      showAirDetails: false,
       showAddButtons: true,
       showPicker: false,
       pickingFire: undefined,
@@ -81,6 +82,10 @@ class HomeScreen extends Component {
     this.props.navigation.navigate("Signup");
   };
 
+  toggleAir = () => {
+    this.setState({ showAirDetails: !this.state.showAirDetails });
+  };
+
   pickProperty = () => {
     this.setState({
       showAddButtons: false,
@@ -136,8 +141,8 @@ class HomeScreen extends Component {
 
   render() {
     const {
-      circles, markers, rating, color, user,
-      showAddButtons, showPicker, displayText, showTextBox,
+      circles, markers, rating, color, user, description, pollutant, recommendation,
+      showAddButtons, showPicker, displayText, showTextBox, showAirDetails,
     } = this.state;
 
     const drawer = (
@@ -200,9 +205,9 @@ class HomeScreen extends Component {
     );
 
     const qualityCircle = showAddButtons && rating && (
-      <View style={[styles.qualityCircle, { backgroundColor: color }]}>
+      <TouchableOpacity style={[styles.qualityCircle, { backgroundColor: color }]} onPress={this.toggleAir}>
         <Text subtitle white center>{`${rating} / 100`}</Text>
-      </View>
+      </TouchableOpacity>
     );
 
     const propertyButton = showAddButtons && (
@@ -247,6 +252,14 @@ class HomeScreen extends Component {
       </View>
     );
 
+    const airDetails = showAirDetails && (
+      <View style={styles.airDetails}>
+        <Text h6>{rating} / 100, {description}</Text>
+        <Text subtitle>Main pollutant: {pollutant}</Text>
+        <Text body>{recommendation}</Text>
+      </View>
+    );
+
     return (
       <Drawer
         ref={ref => this._drawer = ref}
@@ -287,6 +300,7 @@ class HomeScreen extends Component {
           {cancelButton}
           {pickButton}
           {textBox}
+          {airDetails}
         </View>
       </Drawer>
     )
@@ -398,6 +412,17 @@ const styles = StyleSheet.create({
     color: "#212121",
     fontSize: 14,
     letterSpacing: 0.25,
+  },
+  airDetails: {
+    position: "absolute",
+    top: 92,
+    left: 16,
+    right: 16,
+    padding: 8,
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#000",
   },
 });
 
